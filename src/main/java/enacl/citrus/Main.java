@@ -1,5 +1,6 @@
 package enacl.citrus;
 
+import enacl.citrus.terrain.TerrainGeneration;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.coordinate.Pos;
 import net.minestom.server.entity.Player;
@@ -21,8 +22,8 @@ public class Main {
 
 
         // ----- Terrain generation -----
-        // Flat world atm, but hopefully I can get that changed
-        instanceContainer.setGenerator(unit -> unit.modifier().fillHeight(-64, -60, Block.GRASS_BLOCK));
+        // Refer to the class TerrainGeneration for more info.
+        instanceContainer.setGenerator(TerrainGeneration::generate);
 
 
         // ----- Register events -----
