@@ -1,17 +1,43 @@
 package enacl.citrus;
 
-//TIP To <b>Run</b> code, press <shortcut actionId="Run"/> or
-// click the <icon src="AllIcons.Actions.Execute"/> icon in the gutter.
+import net.minestom.server.MinecraftServer;
+import net.minestom.server.coordinate.Pos;
+import net.minestom.server.entity.Player;
+import net.minestom.server.event.GlobalEventHandler;
+import net.minestom.server.event.player.AsyncPlayerConfigurationEvent;
+import net.minestom.server.instance.InstanceContainer;
+import net.minestom.server.instance.InstanceManager;
+import net.minestom.server.instance.block.Block;
+
 public class Main {
     static void main() {
-        //TIP Press <shortcut actionId="ShowIntentionActions"/> with your caret at the highlighted text
-        // to see how IntelliJ IDEA suggests fixing it.
-        IO.println(String.format("Hello and welcome!"));
+        // ----- Init the server -----
+        MinecraftServer server = MinecraftServer.init();
 
-        for (int i = 1; i <= 5; i++) {
-            //TIP Press <shortcut actionId="Debug"/> to start debugging your code. We have set one <icon src="AllIcons.Debugger.Db_set_breakpoint"/> breakpoint
-            // for you, but you can always add more by pressing <shortcut actionId="ToggleLineBreakpoint"/>.
-            IO.println("i = " + i);
-        }
+
+        // ----- Create the instance -----
+        InstanceManager instanceManager = MinecraftServer.getInstanceManager();
+        InstanceContainer instanceContainer = instanceManager.createInstanceContainer();
+
+
+        // ----- Terrain generation -----
+        // Flat world atm, but hopefully I can get that changed
+        instanceContainer.setGenerator(unit -> unit.modifier().fillHeight(-64, -60, Block.GRASS_BLOCK));
+
+
+        // ----- Register events -----
+        GlobalEventHandler globalEventHandler = MinecraftServer.getGlobalEventHandler();
+
+        // Event on player join
+        globalEventHandler.addListener(AsyncPlayerConfigurationEvent.class, event -> {
+            final Player player = event.getPlayer(); // Init the player
+            event.setSpawningInstance(instanceContainer); // Set what instance to spawn in
+            player.setRespawnPoint(new Pos(0, -58, 0)); // Set spawn coords
+        });
+
+
+        // ----- Start the server on the local device at the standard MC port -----
+        // TODO: Allow port and address to be configured.
+        server.start("0.0.0.0", 25565);
     }
 }
