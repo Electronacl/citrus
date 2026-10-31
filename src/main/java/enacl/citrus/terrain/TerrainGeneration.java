@@ -1,7 +1,6 @@
 package enacl.citrus.terrain;
 
 import de.articdive.jnoise.generators.noisegen.opensimplex.SuperSimplexNoiseGenerator;
-import de.articdive.jnoise.generators.noisegen.perlin.PerlinNoiseGenerator;
 import de.articdive.jnoise.modules.octavation.fractal_functions.FractalFunction;
 import de.articdive.jnoise.pipeline.JNoise;
 import net.minestom.server.coordinate.Point;
@@ -15,7 +14,7 @@ public class TerrainGeneration {
 
 
         // ----- Create the generators -----
-        Random random = new Random(seed);
+        // Random random = new Random(seed);
         JNoise octaveNoise1 = JNoise.newBuilder()
                 .superSimplex(SuperSimplexNoiseGenerator.newBuilder().setSeed(seed))
                 .scale(0.01)
@@ -52,7 +51,6 @@ public class TerrainGeneration {
                 }
 
                 // Now, fill out the grass
-                int lastBlock = 0;
                 unit.modifier().setBlock(x, maxY, z, Block.GRASS_BLOCK);
                 for (int i = 1; i <= 3; i++){
                     unit.modifier().setBlock(x, maxY-i, z, Block.DIRT);
