@@ -9,16 +9,22 @@ import net.minestom.server.event.GlobalEventHandler;
 import net.minestom.server.event.player.AsyncPlayerConfigurationEvent;
 import net.minestom.server.instance.InstanceContainer;
 import net.minestom.server.instance.InstanceManager;
+import net.minestom.server.instance.LightingChunk;
 
 public class Main {
     static void main() {
         // ----- Init the server -----
+        // It may be useful to use Velocity in the future
         MinecraftServer server = MinecraftServer.init(new Auth.Online());
 
 
         // ----- Create the instance -----
         InstanceManager instanceManager = MinecraftServer.getInstanceManager();
         InstanceContainer instanceContainer = instanceManager.createInstanceContainer();
+
+
+        // ----- Update Lighting -----
+        instanceContainer.setChunkSupplier(LightingChunk::new);
 
 
         // ----- Terrain generation -----
