@@ -14,6 +14,7 @@ dependencies {
     testImplementation("org.junit.jupiter:junit-jupiter")
     testRuntimeOnly("org.junit.platform:junit-platform-launcher")
     implementation("net.minestom:minestom:2026.10.07-26.2")
+    implementation("de.articdive:jnoise-pipeline:4.1.0")
 }
 
 tasks.test {

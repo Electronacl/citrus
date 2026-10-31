@@ -4,12 +4,15 @@ import enacl.citrus.terrain.TerrainGeneration;
 import net.minestom.server.Auth;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.coordinate.Pos;
+import net.minestom.server.entity.GameMode;
 import net.minestom.server.entity.Player;
 import net.minestom.server.event.GlobalEventHandler;
 import net.minestom.server.event.player.AsyncPlayerConfigurationEvent;
 import net.minestom.server.instance.InstanceContainer;
 import net.minestom.server.instance.InstanceManager;
 import net.minestom.server.instance.LightingChunk;
+
+import java.util.Random;
 
 public class Main {
     static void main() {
@@ -29,7 +32,11 @@ public class Main {
 
         // ----- Terrain generation -----
         // Refer to the class TerrainGeneration for more info.
-        instanceContainer.setGenerator(TerrainGeneration::generate);
+        // Get the seed
+        Random seedGenerator = new Random();
+        long seed = seedGenerator.nextLong();
+        // Generate
+        instanceContainer.setGenerator(unit -> TerrainGeneration.generate(unit, seed));
 
 
         // ----- Register events -----
@@ -39,7 +46,8 @@ public class Main {
         globalEventHandler.addListener(AsyncPlayerConfigurationEvent.class, event -> {
             final Player player = event.getPlayer(); // Init the player
             event.setSpawningInstance(instanceContainer); // Set what instance to spawn in
-            player.setRespawnPoint(new Pos(0, -58, 0)); // Set spawn coords
+            player.setRespawnPoint(new Pos(0, 320, 0)); // Set spawn coords
+            player.setGameMode(GameMode.CREATIVE);
         });
 
 
