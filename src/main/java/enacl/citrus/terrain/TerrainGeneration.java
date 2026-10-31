@@ -7,7 +7,7 @@ import net.minestom.server.coordinate.Point;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.generator.GenerationUnit;
 
-import java.util.Random;
+// import java.util.Random;
 
 public class TerrainGeneration {
     public static void generate(GenerationUnit unit, long seed){
