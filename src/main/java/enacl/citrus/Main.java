@@ -1,6 +1,7 @@
 package enacl.citrus;
 
 import enacl.citrus.terrain.TerrainGeneration;
+import net.minestom.server.Auth;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.coordinate.Pos;
 import net.minestom.server.entity.Player;
@@ -12,7 +13,7 @@ import net.minestom.server.instance.InstanceManager;
 public class Main {
     static void main() {
         // ----- Init the server -----
-        MinecraftServer server = MinecraftServer.init();
+        MinecraftServer server = MinecraftServer.init(new Auth.Online());
 
 
         // ----- Create the instance -----
