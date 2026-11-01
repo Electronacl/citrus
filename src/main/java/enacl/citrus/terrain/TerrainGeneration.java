@@ -7,14 +7,14 @@ import net.minestom.server.coordinate.Point;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.generator.GenerationUnit;
 
-// import java.util.Random;
+ import java.util.Random;
 
 public class TerrainGeneration {
     public static void generate(GenerationUnit unit, long seed){
-
+        int sea_level = 57;
 
         // ----- Create the generators -----
-        // Random random = new Random(seed);
+        Random random = new Random(seed);
         JNoise octaveNoise1 = JNoise.newBuilder()
                 .superSimplex(SuperSimplexNoiseGenerator.newBuilder().setSeed(seed))
                 .scale(0.01)
@@ -48,13 +48,26 @@ public class TerrainGeneration {
                         unit.modifier().setBlock(x, y, z, Block.STONE);
                         maxY = y;
                     }
+                    else {
+                        if (y <= sea_level){
+                            unit.modifier().setBlock(x, y, z, Block.WATER);
+                        }
+                    }
                 }
 
-                // Now, fill out the grass
-                unit.modifier().setBlock(x, maxY, z, Block.GRASS_BLOCK);
-                for (int i = 1; i <= 3; i++){
-                    unit.modifier().setBlock(x, maxY-i, z, Block.DIRT);
+                // Now, fill out the grass, dirt, and fill water
+                if (maxY > sea_level){
+                    unit.modifier().setBlock(x, maxY, z, Block.GRASS_BLOCK);
+                    for (int i = 1; i <= (random.nextBoolean() ? 3 : 2); i++){
+                        unit.modifier().setBlock(x, maxY-i, z, Block.DIRT);
+                    }
                 }
+                else {
+                    unit.modifier().setBlock(x, maxY, z, Block.SAND);
+                }
+
+                // Now to add flowers
+
             }
         }
     }
