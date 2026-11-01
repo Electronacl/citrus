@@ -22,10 +22,11 @@ public class TerrainGeneration {
         // Humid
         double[] targets = {
                 0.4, -0.2, -0.2, 0.5, // Plains
-                -0.1, 0.3, 0.8, -0.8 // Desert
+                -0.1, 0.3, 0.8, -0.8, // Desert
+                -0.7, -0.8, -0.8, 0 // Ice
         };
 
-        int num_biomes = 2;
+        int num_biomes = 3;
 
         // ----- Create the generators -----
         Random random = new Random(seed);
@@ -98,6 +99,9 @@ public class TerrainGeneration {
                         case 1:
                             unit.modifier().setBiome(x, y, z, Biome.DESERT);
                             break;
+                        case 2:
+                            unit.modifier().setBiome(x, y, z, Biome.ICE_SPIKES);
+                            break;
                     }
                     // Get terrain density function
                     double density = 0;
@@ -108,7 +112,13 @@ public class TerrainGeneration {
                     density -= (y-100-(altitude*100)) /(50*(smoothness+1));
 
                     if (density > 0){
-                        unit.modifier().setBlock(x, y, z, Block.STONE);
+                        if (best_biome == 2 && y >= sea_level){
+                            // Ice biome!
+                            unit.modifier().setBlock(x, y, z, Block.ICE);
+                        }
+                        else {
+                            unit.modifier().setBlock(x, y, z, Block.STONE);
+                        }
                         maxY = y;
                     }
                     else {
@@ -127,12 +137,16 @@ public class TerrainGeneration {
                             unit.modifier().setBlock(x, maxY-i, z, Block.DIRT);
                         }
                     }
-                    else {
+                    else if (best_biome == 1) {
                         // Desert
                         unit.modifier().setBlock(x, maxY, z, Block.SAND);
                         for (int i = 1; i <= (random.nextBoolean() ? 3 : 2); i++){
                             unit.modifier().setBlock(x, maxY-i, z, Block.SAND);
                         }
+                    }
+                    else if (best_biome == 2){
+                        // Ice
+                        // Do nothing
                     }
                 }
                 else {

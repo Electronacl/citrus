@@ -1,5 +1,6 @@
 package enacl.citrus;
 
+import enacl.citrus.commands.LimitTP;
 import enacl.citrus.terrain.TerrainGeneration;
 import net.kyori.adventure.text.Component;
 import net.minestom.server.Auth;
@@ -81,6 +82,8 @@ public class Main {
            );
         });
 
+        // ----- Command registering -----
+        MinecraftServer.getCommandManager().register(new LimitTP());
 
         // ----- Start the server on the local device at the standard MC port -----
         // TODO: Allow port and address to be configured.
