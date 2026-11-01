@@ -6,11 +6,11 @@ import de.articdive.jnoise.pipeline.JNoise;
 import net.minestom.server.coordinate.Point;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.generator.GenerationUnit;
-
- import java.util.Random;
+import java.util.Random;
 
 public class TerrainGeneration {
-    public static void generate(GenerationUnit unit, long seed){
+    public static void generate(GenerationUnit unit, long seed) {
+        // ----- Static constants -----
         int sea_level = 57;
 
         // ----- Create the generators -----

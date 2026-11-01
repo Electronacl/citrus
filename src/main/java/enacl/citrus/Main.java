@@ -16,11 +16,18 @@ import net.minestom.server.instance.InstanceManager;
 import net.minestom.server.instance.LightingChunk;
 import net.minestom.server.ping.Status;
 
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
 import java.util.Random;
 
 public class Main {
     static String VERSION = "v0.0.0-alpha1 (a1)";
-    static void main() {
+    static void main() throws IOException {
+        // ----- Get logo for use later
+        File logoFile = new File(System.getProperty("user.dir") + "\\citrus.png");
+        byte[] logoBytes = Files.readAllBytes(logoFile.toPath());
+
         // ----- Init the server -----
         // It may be useful to use Velocity in the future
         MinecraftServer server = MinecraftServer.init(new Auth.Online());
@@ -61,9 +68,15 @@ public class Main {
         });
 
         globalEventHandler.addListener(ServerListPingEvent.class, event -> {
-           event.setStatus(Status.builder()
+            int onlinePlayers = MinecraftServer.getConnectionManager().getOnlinePlayerCount();
+            event.setStatus(Status.builder()
                             .description(Component.text("A Citrus server! " + VERSION))
                             .versionInfo(Status.VersionInfo.DEFAULT)
+                            .favicon(logoBytes)
+                            .playerInfo(Status.PlayerInfo.builder()
+                                    .onlinePlayers(onlinePlayers)
+                                    .maxPlayers(20)
+                                    .build())
                             .build()
            );
         });
