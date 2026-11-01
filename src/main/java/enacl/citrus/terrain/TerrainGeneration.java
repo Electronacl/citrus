@@ -21,6 +21,15 @@ public class TerrainGeneration {
                 .octavate(5, 0.3, 2, FractalFunction.FBM, true)
                 .build();
 
+        JNoise altitudeMap = JNoise.newBuilder()
+                .superSimplex(SuperSimplexNoiseGenerator.newBuilder().setSeed(seed-1))
+                .scale(0.0002)
+                .build();
+
+        JNoise smoothMap = JNoise.newBuilder()
+                .superSimplex(SuperSimplexNoiseGenerator.newBuilder().setSeed(seed-2))
+                .scale(0.0002)
+                .build();
 
         // ----- Get positions to generate -----
         Point start = unit.absoluteStart();
@@ -36,13 +45,17 @@ public class TerrainGeneration {
 
                 int maxY = 0;
 
+                double altitude = altitudeMap.evaluateNoise(x, z);
+                double smoothness = smoothMap.evaluateNoise(x, z);
+
                 for (int y = (int) start.y(); y < start.y() + size.y(); y++) {
                     // Get terrain density function
                     double density = 0;
                     // Apply base noise functions
                     density += octaveNoise1.evaluateNoise(x, y, z);
 
-                    density -= (double) (y-100) /70;
+                    //density -= (double) (y-100) /70;
+                    density -= (double) (y-100-(altitude*100)) /(50*(smoothness+1));
 
                     if (density > 0){
                         unit.modifier().setBlock(x, y, z, Block.STONE);
